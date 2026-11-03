@@ -20,22 +20,24 @@ If you know of a publicly disclosed security vulnerability for Velero, please **
 
 **IMPORTANT: Do not file public issues on GitHub for security vulnerabilities**
 
-To report a vulnerability or a security-related issue, please contact the email address with the details of the vulnerability. The email will be fielded by the Security Team and then shared with the Velero maintainers who have committer and release permissions. Emails will be addressed within 3 business days, including a detailed plan to investigate the issue and any potential workarounds to perform in the meantime. Do not report non-security-impacting bugs through this channel. Use [GitHub issues](https://github.com/velero-io/velero/issues/new/choose) instead. Alternatively, you may use GitHub's [private vulnerability reporting](https://docs.github.com/en/code-security/concepts/vulnerability-reporting-and-management/about-repository-security-advisories) feature via the repository's [Security tab](https://github.com/velero-io/velero/security/advisories/new).
+To report a vulnerability or a security-related issue, please contact the email address with the details of the vulnerability. The email will be fielded by the Security Team, which is made up of the Velero maintainers who have committer and release permissions. Emails will be addressed within 3 business days, including a detailed plan to investigate the issue and any potential workarounds to perform in the meantime. Do not report non-security-impacting bugs through this channel. Use [GitHub issues](https://github.com/velero-io/velero/issues/new/choose) instead. Alternatively, you may use GitHub's [private vulnerability reporting](https://docs.github.com/en/code-security/concepts/vulnerability-reporting-and-management/about-repository-security-advisories) feature via the repository's [Security tab](https://github.com/velero-io/velero/security/advisories/new).
 
 
 ## Security Contacts
 
-Reports sent to cncf-velero-security@lists.cncf.io are triaged by the Velero Security Team and shared with the [Velero maintainers](https://github.com/velero-io/velero/blob/main/MAINTAINERS.md), who hold committer and release permissions. Velero does not currently offer a bug bounty program.
+Reports sent to cncf-velero-security@lists.cncf.io are handled by the Velero Security Team, which is made up of the [Velero maintainers](https://github.com/velero-io/velero/blob/main/MAINTAINERS.md), who hold committer and release permissions. Velero does not currently offer a bug bounty program.
 
 
 ## Security Response Roles
 
-The Security Team assigns the following roles for each report. One person may hold more than one role, and the
-maintainers with committer and release permissions back up each role.
+All [Velero maintainers](https://github.com/velero-io/velero/blob/main/MAINTAINERS.md) who hold committer and release
+permissions collectively form the Velero Security Team and share the work of handling vulnerability reports. For each
+report, the maintainers who respond take the roles below. One person may hold more than one role, and any maintainer
+can back up another.
 
 | Role | Responsibilities |
 | --- | --- |
-| Security Response Lead | Acknowledges the report and starts the conversation with the reporter within 3 business days; owns the timeline and keeps the reporter informed; decides whether the report is a vulnerability. |
+| Security Response Lead | The maintainer who first picks up the report, until another maintainer takes over. Acknowledges the report and starts the conversation with the reporter within 3 business days; owns the timeline and keeps the reporter informed; decides whether the report is a vulnerability. |
 | Triage and CVSS owner | Investigates the vulnerability, determines its effects and criticality, calculates the CVSS score, and requests the CVE. |
 | Fix owner | Prepares and reviews the fix in a private GitHub security advisory fork, performs internal testing, and confirms the affected and fixed versions. |
 | Release manager | Cuts the patch release that contains the fix, following the [release document](https://github.com/velero-io/velero/blob/main/site/content/docs/main/release-instructions.md). |
@@ -46,8 +48,8 @@ If a report has not been acknowledged within 3 business days, the reporter may e
 private vulnerability reporting feature on the repository's Security tab. If a role holder has a conflict of interest
 or is unavailable, the Security Response Lead reassigns the role to another maintainer.
 
-<!-- TODO(team): publish the current role holders here (names or GitHub handles) and confirm the role names, the
-escalation path, and that the cncf-velero-security@lists.cncf.io membership matches. -->
+<!-- TODO(team): confirm that the maintainers collectively form the Security Team and share these roles, and that the
+membership of cncf-velero-security@lists.cncf.io matches the maintainers list. -->
 
 
 ## Proposed Email Content

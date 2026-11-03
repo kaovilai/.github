@@ -253,9 +253,9 @@ Partly verified. The default branch of `velero-io/velero` is protected, and merg
 
 - [ ] **Document assignment of security response roles and how reports are handled.** _(This is distinct from the security reporting process above — document who is responsible for triaging and responding to reports, not just where to send them. For reference, see the [Kubernetes Security Response Committee](https://github.com/kubernetes/committee-security-response) as a model for named membership, documented responsibilities, and a clear escalation path.)_
 
-Proposed, not yet final. This change adds a "Security Response Roles" section to [`SECURITY.md`](https://github.com/velero-io/.github/blob/main/SECURITY.md) defining the roles, their responsibilities and the escalation path.
+Proposed, not yet final. This change adds a "Security Response Roles" section to [`SECURITY.md`](https://github.com/velero-io/.github/blob/main/SECURITY.md) defining the roles, their responsibilities and the escalation path. All maintainers with committer and release permissions collectively form the Security Team and share the roles, which the responding maintainers take for each report, so no separate roster of named role holders is kept.
 
-<!-- TODO(team): name the current role holders in SECURITY.md and confirm the role definitions, then check this box. -->
+<!-- TODO(team): confirm that model and the role definitions, then check this box. -->
 
 - [ ] **Document [Security Self-Assessment](https://tag-security.cncf.io/community/assessments/guide/self-assessment/).**
 

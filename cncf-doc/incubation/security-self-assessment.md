@@ -251,14 +251,15 @@ The full policy is in [`SECURITY.md`](https://github.com/velero-io/.github/blob/
 
 ### Vulnerability response process
 
-Reports sent to the security list are triaged by the Velero Security Team and shared with the maintainers who hold
-committer and release permissions.
+Reports sent to the security list are handled by the Velero Security Team, which is made up of the maintainers who
+hold committer and release permissions.
 
 **TODO(team):** the incubation criteria ask for *documented assignment of security response roles* (who triages,
-who scores, who prepares the fix and release, who communicates, and the escalation path), modeled on the
-Kubernetes Security Response Committee. This PR adds a **Security Response Roles** section to `SECURITY.md` that
-defines the roles, responsibilities and escalation path. The current role holders are not yet named: fill in the
-roster in that section and confirm the role definitions.
+who scores, who prepares the fix and release, who communicates, and the escalation path); the Kubernetes Security
+Response Committee is given only as a reference model. This PR adds a **Security Response Roles** section to
+`SECURITY.md` that defines the roles, responsibilities and escalation path. Following the maintainers' proposal, all
+maintainers collectively form the Security Team and share the roles, which the responding maintainers take for each
+report, so no separate roster is kept. Confirm that model.
 
 **TODO(team):** `SECURITY.md` previously stated that only the most recent Velero version is supported, while the
 [support process](https://velero.io/docs/main/support-process/) states best-effort support for the current and n-1

@@ -32,7 +32,7 @@ This document follows the CNCF TAG Security and Compliance
 | Software | <https://github.com/velero-io/velero> |
 | Security Provider | No. Velero's primary function is backup, restore and migration of Kubernetes resources and persistent volumes, not securing another system. |
 | Languages | Go |
-| SBOM | Not currently published as a release artifact. Direct and transitive dependencies are listed in [`go.mod`](https://github.com/velero-io/velero/blob/main/go.mod) / `go.sum` and visible in the GitHub dependency graph. **TODO(team):** decide whether to publish an SBOM with releases (see [Appendix](#appendix)). |
+| SBOM | Not currently published as a release artifact. Direct and transitive dependencies are listed in [`go.mod`](https://github.com/velero-io/velero/blob/main/go.mod) / `go.sum` and visible in the GitHub dependency graph. Publishing an SBOM with releases is planned; related SBOM work is tracked in [velero-io/velero#10748](https://github.com/velero-io/velero/issues/10748). |
 
 ### Security links
 
@@ -119,8 +119,8 @@ Backup and restore hooks: [backup hooks](https://velero.io/docs/main/backup-hook
 * By default, `velero install` binds the Velero server service account to the `cluster-admin` ClusterRole so it can
   back up and restore any resource in the cluster; narrowing this is the operator's responsibility (see
   [RBAC](https://velero.io/docs/main/rbac/)).
-  **TODO(team):** decide whether to state a tenancy position, for example whether tenant isolation or per-namespace
-  `Backup`/`Restore` access is a goal or a non-goal. Until then this document states only the default behavior.
+  Velero remains an administrative tool with access to the entire cluster. Multi-tenant models are tracked in
+  [velero-io/velero#2587](https://github.com/velero-io/velero/issues/2587) (epic) and [velero-io/velero#18](https://github.com/velero-io/velero/issues/18) (design).
 
 ## Self-assessment use
 
@@ -179,7 +179,7 @@ claiming these.
 Velero does not currently claim compliance with a formal security standard (PCI-DSS, ISO 27001, SOC 2, GDPR,
 etc.).
 
-**TODO(team):** confirm there is no compliance statement the project wants to make.
+The project makes no compliance claims at this time.
 
 ## Secure development practices
 
@@ -206,12 +206,12 @@ etc.).
   documented in
   [release instructions](https://github.com/velero-io/velero/blob/main/site/content/docs/main/release-instructions.md).
   Release artifacts and container images are **not** currently signed, and SBOM and provenance attestations are not
-  published (build scripts set `--sbom=false` and `--provenance=false`). Commit signing is not required.
-  **TODO(team):** confirm; these are the main gaps (see [Appendix](#appendix)).
+  published (build scripts set `--sbom=false` and `--provenance=false`). Commit signing is not required. SBOM, signing and provenance for releases are planned (SBOM-related work is tracked
+  in [velero-io/velero#10748](https://github.com/velero-io/velero/issues/10748)); see the [Appendix](#appendix).
 * **Static analysis and fuzzing.** CodeQL static analysis for Go runs on pull requests, pushes to `main` and weekly
   ([`codeql.yml`](https://github.com/velero-io/velero/blob/main/.github/workflows/codeql.yml), added in
   [velero-io/velero#10695](https://github.com/velero-io/velero/pull/10695), merged 2026-10-30). Its findings are
-  informational for now; the check is not yet required. No fuzzing is configured today.
+  informational for now; the check is not yet required. No fuzzing is configured today and a fuzzing plan is not yet decided.
   **TODO(team):** confirm whether and when to make the CodeQL check required (proposed: after the first few weeks,
   once the `main` baseline is clean), and decide on a fuzzing plan.
 * **Access control.** Write access is limited to maintainers through the GitHub team referenced in `CODEOWNERS`.
@@ -254,23 +254,24 @@ The full policy is in [`SECURITY.md`](https://github.com/velero-io/.github/blob/
 Reports sent to the security list are handled by the Velero Security Team, which is made up of the maintainers who
 hold committer and release permissions.
 
-**TODO(team):** the incubation criteria ask for *documented assignment of security response roles* (who triages,
-who scores, who prepares the fix and release, who communicates, and the escalation path); the Kubernetes Security
-Response Committee is given only as a reference model. This PR adds a **Security Response Roles** section to
-`SECURITY.md` that defines the roles, responsibilities and escalation path. Following the maintainers' proposal, all
-maintainers collectively form the Security Team and share the roles, which the responding maintainers take for each
-report, so no separate roster is kept. Confirm that model.
+The incubation criteria ask for *documented assignment of security response roles* (who triages, who scores, who
+prepares the fix and release, who communicates, and the escalation path); the Kubernetes Security Response Committee
+is given only as a reference model. `SECURITY.md` has a **Security Response Roles** section that defines the roles,
+responsibilities and escalation path. All maintainers collectively form the Security Team and share the roles, which
+the responding maintainers take for each report, so no separate roster is kept.
 
-**TODO(team):** `SECURITY.md` previously stated that only the most recent Velero version is supported, while the
+`SECURITY.md` previously stated that only the most recent Velero version is supported, while the
 [support process](https://velero.io/docs/main/support-process/) states best-effort support for the current and n-1
-minor versions. This PR aligns `SECURITY.md` with the support process (fixes released for the latest version,
-backported to n-1 on a best-effort basis). Confirm that policy, in particular that CVE fixes are backported to n-1.
+minor versions. `SECURITY.md` now matches the support process: fixes are released for the latest version and
+backported to n-1 on a best-effort basis.
 
 ### Incident response
 
 The project has a documented vulnerability response process (above) but no separate incident response runbook for
 a compromise of project infrastructure (for example repository, CI, release or registry credentials).
-**TODO(team):** decide whether to document one before the joint assessment.
+Suspected compromises of project infrastructure are reported through the same private channel as vulnerabilities,
+the Velero security email in [`SECURITY.md`](https://github.com/velero-io/.github/blob/main/SECURITY.md)
+(cncf-velero-security@lists.cncf.io), and handled by the Security Team under the roles above.
 
 ## Appendix
 

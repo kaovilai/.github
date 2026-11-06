@@ -7,8 +7,6 @@ Velero is an open source tool with a growing community devoted to safe backup an
 
 The Velero project maintains the following [governance document](https://github.com/velero-io/.github/blob/main/GOVERNANCE.md), [release document](https://github.com/velero-io/velero/blob/main/site/content/docs/main/release-instructions.md), and [support document](https://velero.io/docs/main/support-process/). Please refer to these for release and related details. Security fixes are released for the most recent version of Velero. Consistent with the [support process](https://velero.io/docs/main/support-process/), the maintainers provide best-effort support for the current and n-1 minor versions, including all patch releases; a security fix is backported to the n-1 minor version on a best-effort basis. Older versions are not supported. Each [release](https://github.com/velero-io/velero/releases) includes information about upgrading to the latest version.
 
-<!-- TODO(team): confirm this supported-versions wording and that CVE fixes are backported to n-1. -->
-
 
 ## Reporting a Vulnerability - Private Disclosure Process
 
@@ -47,9 +45,6 @@ If a report has not been acknowledged within 3 business days, the reporter may e
 [Velero maintainers](https://github.com/velero-io/velero/blob/main/MAINTAINERS.md) directly, or by using GitHub's
 private vulnerability reporting feature on the repository's Security tab. If a role holder has a conflict of interest
 or is unavailable, the Security Response Lead reassigns the role to another maintainer.
-
-<!-- TODO(team): confirm that the maintainers collectively form the Security Team and share these roles, and that the
-membership of cncf-velero-security@lists.cncf.io matches the maintainers list. -->
 
 
 ## Proposed Email Content

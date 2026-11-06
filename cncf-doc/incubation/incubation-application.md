@@ -199,9 +199,9 @@ The process is documented in [`ROADMAP.md`](https://github.com/velero-io/velero/
 
 - [x] **History of regular, quality releases.**
 
-Minor releases over the last two years: v1.14.0 (2024-06-18), v1.15.0 (2024-11-06), v1.16.0 (2025-04-14), v1.17.0 (2025-09-15), v1.18.0 (2026-03-06), roughly every five to six months, with patch releases in between (for example v1.18.1 on 2026-05-19, v1.18.2 on 2026-06-26, v1.18.3 on 2026-09-21 and v1.18.4 on 2026-09-28). The full list is on the [releases page](https://github.com/velero-io/velero/releases). Release candidate and release criteria are documented in the [release instructions](https://velero.io/docs/main/release-instructions/#velero-release-requirements).
+Minor releases since v1.11.0 (2023-04-20): v1.12.0 (2023-09-22), v1.13.0 (2024-01-29), v1.14.0 (2024-06-18), v1.15.0 (2024-11-06), v1.16.0 (2025-04-14), v1.17.0 (2025-09-15) and v1.18.0 (2026-03-06), at intervals of 129 to 172 days (roughly every four to six months), with patch releases in between (for example v1.18.1 on 2026-05-19, v1.18.2 on 2026-06-26, v1.18.3 on 2026-09-21 and v1.18.4 on 2026-09-28). The full list is on the [releases page](https://github.com/velero-io/velero/releases). Release candidate and release criteria are documented in the [release instructions](https://velero.io/docs/main/release-instructions/#velero-release-requirements).
 
-<!-- TODO(team): the project does not publish a fixed release cadence; decide whether to state one, and add pointers to the evidence of release quality you want reviewers to see (for example e2e suites run per release). -->
+These dates are estimates from past releases. The project does not commit to a release schedule and there is no SLA on releases.
 
 ### Required 
 
@@ -251,11 +251,9 @@ Partly verified. The default branch of `velero-io/velero` is protected, and merg
 
 <!-- TODO(team): an organization owner must confirm that two-factor authentication is required for the `velero-io` organization, and describe how release and registry credentials are scoped and who holds them. Then check this box. -->
 
-- [ ] **Document assignment of security response roles and how reports are handled.** _(This is distinct from the security reporting process above — document who is responsible for triaging and responding to reports, not just where to send them. For reference, see the [Kubernetes Security Response Committee](https://github.com/kubernetes/committee-security-response) as a model for named membership, documented responsibilities, and a clear escalation path.)_
+- [x] **Document assignment of security response roles and how reports are handled.** _(This is distinct from the security reporting process above — document who is responsible for triaging and responding to reports, not just where to send them. For reference, see the [Kubernetes Security Response Committee](https://github.com/kubernetes/committee-security-response) as a model for named membership, documented responsibilities, and a clear escalation path.)_
 
-Proposed, not yet final. This change adds a "Security Response Roles" section to [`SECURITY.md`](https://github.com/velero-io/.github/blob/main/SECURITY.md) defining the roles, their responsibilities and the escalation path. All maintainers with committer and release permissions collectively form the Security Team and share the roles, which the responding maintainers take for each report, so no separate roster of named role holders is kept.
-
-<!-- TODO(team): confirm that model and the role definitions, then check this box. -->
+This change adds a "Security Response Roles" section to [`SECURITY.md`](https://github.com/velero-io/.github/blob/main/SECURITY.md) defining the roles, their responsibilities and the escalation path. All maintainers with committer and release permissions collectively form the Security Team and share the roles, which the responding maintainers take for each report, so no separate roster of named role holders is kept.
 
 - [ ] **Document [Security Self-Assessment](https://tag-security.cncf.io/community/assessments/guide/self-assessment/).**
 

@@ -211,9 +211,12 @@ The project makes no compliance claims at this time.
 * **Static analysis and fuzzing.** CodeQL static analysis for Go runs on pull requests, pushes to `main` and weekly
   ([`codeql.yml`](https://github.com/velero-io/velero/blob/main/.github/workflows/codeql.yml), added in
   [velero-io/velero#10695](https://github.com/velero-io/velero/pull/10695), merged 2026-10-30). Its findings are
-  informational for now; the check is not yet required. No fuzzing is configured today and a fuzzing plan is not yet decided.
+  informational for now; the check is not yet required. No fuzzing is configured today. The plan is to start with a
+  few Go fuzz targets run in CI for the code that parses untrusted input, with the aim of enrolling in OSS-Fuzz later;
+  the first targets, for backup archive extraction, are proposed in
+  [velero-io/velero#10798](https://github.com/velero-io/velero/pull/10798).
   **TODO(team):** confirm whether and when to make the CodeQL check required (proposed: after the first few weeks,
-  once the `main` baseline is clean), and decide on a fuzzing plan.
+  once the `main` baseline is clean).
 * **Access control.** Write access is limited to maintainers through the GitHub team referenced in `CODEOWNERS`.
   **TODO(team):** document that two-factor authentication is required for the `velero-io` organization after
   verifying the org setting, and describe how repository, release and registry credentials are scoped and rotated.

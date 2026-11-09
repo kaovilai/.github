@@ -195,19 +195,21 @@ The project makes no compliance claims at this time.
 * **Code review.** The `main` branch is protected: two approving reviews, review by a code owner
   ([`CODEOWNERS`](https://github.com/velero-io/velero/blob/main/.github/CODEOWNERS) assigns the maintainer team),
   stale approvals dismissed on new commits, rules enforced for administrators, force pushes disabled.
-* **Required CI.** DCO and the `Run CI` check (`make ci`: Go module verification, generated-code verification,
-  build and unit tests) must pass before merge. Separate pull request workflows run the linter, spell checking and
+* **Required CI.** DCO and the `Run CI` check (`make ci`: Go module verification, gofmt/goimports checks, build-image
+  tool checksum and generated issue-template verification, build and unit tests) must pass before merge. Generated
+  CRD/API code is not verified in CI. Separate pull request workflows run the linter, spell checking and
   end-to-end tests on kind.
 * **Automated vulnerability and supply chain checks.**
   * Nightly [Trivy scan](https://github.com/velero-io/velero/blob/main/.github/workflows/nightly-trivy-scan.yml)
     (critical, high and medium severities) uploaded to GitHub code scanning.
   * [OpenSSF Scorecard](https://github.com/velero-io/velero/blob/main/.github/workflows/scorecard.yml) workflow,
     weekly and on push to `main`, with results published.
-  * [Dependabot](https://github.com/velero-io/velero/blob/main/.github/dependabot.yml) for Go modules (including
-    `pkg/apis`) and GitHub Actions, plus Dependabot security updates.
+  * [Dependabot](https://github.com/velero-io/velero/blob/main/.github/dependabot.yml) for Go modules and GitHub
+    Actions, plus Dependabot security updates.
   * GitHub secret scanning with push protection is enabled on the repository.
-* **GitHub Actions hygiene.** Workflows declare read-only default permissions; the Scorecard `Token-Permissions`
-  and `Dangerous-Workflow` checks currently score 10/10.
+* **GitHub Actions hygiene.** Workflows declare explicit permissions, but not all are read-only: Scorecard's
+  `Token-Permissions` check scores 0 in the 2026-11-05 run (excessive workflow token permissions, including
+  job-level `contents: write` in `backport.yml` and `rebase.yml`), while `Dangerous-Workflow` scores 10/10.
 * **Releases.** Release binaries are built with GoReleaser and accompanied by a checksum file; the process is
   documented in
   [release instructions](https://github.com/velero-io/velero/blob/main/site/content/docs/main/release-instructions.md).
@@ -223,8 +225,10 @@ The project makes no compliance claims at this time.
   maintainer discussion and is deferred.
   **TODO(team):** confirm whether and when to make the CodeQL check required (proposed: after the first few weeks,
   once the `main` baseline is clean).
-* **Access control.** Write access is limited to maintainers through the GitHub team referenced in `CODEOWNERS`.
-  **TODO(team):** document that two-factor authentication is required for the `velero-io` organization after
+* **Access control.** Write access is normally granted through the maintainer team referenced in `CODEOWNERS`; a
+  small number of outside collaborators also hold direct write access. **TODO(team):** reconcile the direct write
+  grants (adam-jian-zhang, Joeavaikath, chlins, priyansh17) with MAINTAINERS.md, or remove them. **TODO(team):**
+  document that two-factor authentication is required for the `velero-io` organization after
   verifying the org setting, and describe how repository, release and registry credentials are scoped and rotated.
 
 ### Communication channels
@@ -305,16 +309,21 @@ will be assigned one.
   saved on 2020-08-31, against older criteria. **TODO(team):** an entry owner or admin must update the repository URL
   to `velero-io/velero`, re-verify the answers against the current criteria, and confirm the passing badge. The
   README badge link was moved to `bestpractices.dev` in [velero-io/velero#10683](https://github.com/velero-io/velero/pull/10683).
-* OpenSSF Scorecard (<https://scorecard.dev/viewer/?uri=github.com/velero-io/velero>) was 6.9 on 2026-10-22.
-  Full marks: Code-Review, Token-Permissions, Dangerous-Workflow, Dependency-Update-Tool, Maintained,
-  Security-Policy, CI-Tests, Binary-Artifacts, License, Packaging, Contributors. Open items:
-  * `SAST` (0): CodeQL was added in [velero-io/velero#10695](https://github.com/velero-io/velero/pull/10695); the score
-    should update on the next Scorecard run.
+* OpenSSF Scorecard (<https://scorecard.dev/viewer/?uri=github.com/velero-io/velero>) was 6.9 on 2026-10-22 and 7.3
+  on 2026-11-05. Full marks: Code-Review, Dangerous-Workflow, Dependency-Update-Tool, Maintained,
+  Security-Policy, CI-Tests, Binary-Artifacts, License, Packaging, Contributors, Vulnerabilities. Open items:
+  * `SAST` (9 in the 2026-11-05 run): CodeQL was added in
+    [velero-io/velero#10695](https://github.com/velero-io/velero/pull/10695) and is detected, but does not run on all
+    commits yet.
   * `Signed-Releases` (0): sign release artifacts and images (for example with cosign); publish SBOM and provenance.
   * `Fuzzing` (0): add fuzz targets for parsers and archive handling.
   * `Pinned-Dependencies` (3): pin remaining GitHub Actions and container base images by digest.
-  * `Vulnerabilities` (1): triage open dependency vulnerabilities.
-  * `CII-Best-Practices` (0): resolved by updating the badge repository URL above.
+  * `Token-Permissions` (0): excessive workflow token permissions (job-level `contents: write` in `backport.yml`
+    and `rebase.yml`, top-level `contents: write` in `update-dependabot-release-branches.yml`).
+  * `CII-Best-Practices` (0): the README badge link was fixed in
+    [velero-io/velero#10683](https://github.com/velero-io/velero/pull/10683), but the bestpractices.dev entry itself
+    still points at `vmware-tanzu/velero`, so the check will not pass until an entry owner updates that URL — see the
+    OpenSSF Best Practices bullet above.
   * `Branch-Protection` (-1): branch protection is configured, but the Scorecard token cannot read it;
     provide a token with the required scope.
 

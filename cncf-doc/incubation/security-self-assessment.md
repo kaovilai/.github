@@ -71,7 +71,7 @@ and storage integrations are delivered as plugins. See
 | Actor | Description | Isolation |
 | -- | -- | -- |
 | Velero server | Single-replica `Deployment` in the Velero namespace running the backup, restore, schedule and related controllers. | Own pod and service account. Container drops all Linux capabilities, sets `allowPrivilegeEscalation: false` and the `RuntimeDefault` seccomp profile. Image runs as non-root user `cnb`. |
-| node-agent | `DaemonSet` that performs file system backup/restore and data movement on each node. | Own pod. Runs as UID 0 and mounts the kubelet pod volume host path unless disabled (`--node-agent-disable-host-path`). Privileged mode is opt-in (`--privileged-node-agent`, needed only to back up block devices). |
+| node-agent | `DaemonSet` that performs file system backup/restore and data movement on each node. | Own pod. Runs as UID 0 and mounts the kubelet pod volume host path unless disabled (`--node-agent-disable-host-path`). Privileged mode is opt-in (`--privileged-node-agent`); it is required to back up block devices, and on some platforms also for file system backup itself — on OpenShift the node agent needs it to access pod volumes under the default SELinux policy ([file system backup guide](https://velero.io/docs/main/file-system-backup/)). |
 | Plugins | Object store, volume snapshotter, and backup/restore item action plugins. Added to the server pod as init containers that copy the plugin binary into a shared volume. | Separate processes from the server; talk to the server over [go-plugin](https://github.com/hashicorp/go-plugin) gRPC. They share the server pod, service account and credentials. |
 | Velero CLI | Local client that creates and inspects Velero custom resources and runs `velero install`. | Runs with the user's kubeconfig permissions. |
 | Backup storage location | Object store holding backup metadata, logs, and (for file system backup and data movement) Kopia repository data. | External to the cluster; protected by the storage provider and the credentials Velero is given. |
@@ -109,11 +109,14 @@ Backup and restore hooks: [backup hooks](https://velero.io/docs/main/backup-hook
 
 * Velero does not itself encrypt backup metadata or provider snapshots. It relies on the native mechanisms of the
   object store and snapshot system ([locations](https://velero.io/docs/main/locations/)).
-* Velero's built-in file system backup and data mover use a static, common repository encryption key for all
-  backup repositories. **Anyone with access to the backup storage can decrypt that backup data**, so storage access
-  must be restricted
-  ([file system backup limitations](https://velero.io/docs/main/file-system-backup/),
-  [data mover limitations](https://velero.io/docs/main/csi-snapshot-data-movement/)).
+* By default, Velero's built-in file system backup and data mover initialize every backup repository with the same
+  static, compiled-in repository password (`static-passw0rd`, written to the `velero-repo-credentials` secret).
+  **With that default, anyone with access to the backup storage can decrypt the backup data**, so storage access must
+  be restricted. Operators can and should replace the password before the first backup by updating the
+  `repository-password` key in `velero-repo-credentials`; repositories created with a custom password are not
+  decryptable with the default key. See the notes in the
+  [file system backup limitations](https://velero.io/docs/main/file-system-backup/) and
+  [data mover limitations](https://velero.io/docs/main/csi-snapshot-data-movement/) guides.
 * Velero does not sandbox plugins from the server: a plugin runs in the server pod and can use the server's
   service account and credentials. Only install plugins you trust.
 * By default, `velero install` binds the Velero server service account to the `cluster-admin` ClusterRole so it can
@@ -144,9 +147,12 @@ These are design elements that make the product itself secure and are not config
 * **Kubernetes RBAC on Velero custom resources.** Creating `Backup`, `Restore`, `Schedule`,
   `BackupStorageLocation` and related resources is governed by Kubernetes RBAC. Anyone able to create these in the
   Velero namespace can cause cluster data to be written to, or read from, the configured storage location.
-* **Credentials held as Kubernetes secrets.** Object store and snapshot credentials are read from secrets in the
-  Velero namespace (default `cloud-credentials`, or a per-location secret reference), not from CLI flags or
-  container images.
+* **Credentials are Kubernetes secrets by default.** By default, object store and snapshot credentials are read from
+  secrets in the Velero namespace (default `cloud-credentials`, or a per-location secret reference). Installations
+  using a workload identity mechanism instead run without a credential secret: `velero install --no-secret` with the
+  provider's pod annotations (for example kube2iam/kiam on AWS or GKE Workload Identity), as documented in
+  [customize installation](https://velero.io/docs/main/customize-installation/). The server then authenticates
+  through the pod's cloud identity rather than a stored secret.
 * **Plugin process boundary.** Plugins run as separate processes and communicate with the server through
   go-plugin gRPC, rather than being linked into the server.
 
